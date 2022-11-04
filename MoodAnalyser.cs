@@ -12,7 +12,7 @@ namespace MoodAnalyserExceptionProblem
 
         public MoodAnalyser()
         {
-
+            this.message = null;
         }
 
         public MoodAnalyser(string message)
@@ -24,6 +24,14 @@ namespace MoodAnalyserExceptionProblem
         {
             try
             {
+                if(this.message == null)
+                {
+                    throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.NULL_MESSAGE, "Message is NULL");
+                }
+                if(this.message.Equals(string.Empty))
+                {
+                    throw new MoodAnalysisException(MoodAnalysisException.ExceptionType.EMPTY_MESSAGE, "Message is Empty");
+                }
                 if (this.message.Contains("Sad"))
                 {
                     return "SAD";
@@ -33,9 +41,23 @@ namespace MoodAnalyserExceptionProblem
                     return "HAPPY";
                 }
             }
-            catch
+            catch(MoodAnalysisException ex)
             {
+                Console.WriteLine(ex.Message);
+                if (ex.type == MoodAnalysisException.ExceptionType.EMPTY_MESSAGE)
+                    return "";
+                else
+                    return null;
+            }
+            catch (NullReferenceException ex)
+            {
+                Console.WriteLine(ex.Message);
                 return "HAPPY";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
             }
         }
 
